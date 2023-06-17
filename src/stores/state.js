@@ -8,7 +8,7 @@ export const useGlobalState = defineStore({
         }
     }),
     getters: {
-
+        isLogin: (state) => (state.token !== ''),
     },
     actions: {
         setToken(token){
