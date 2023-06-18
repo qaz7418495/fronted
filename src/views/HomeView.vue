@@ -1,6 +1,6 @@
-<script setup>
-</script>
-
 <template>
     HomeView
 </template>
+<script setup>
+
+</script>
