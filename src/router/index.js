@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import {useGlobalState} from "../stores/state"
 import { ElNotification } from 'element-plus'
 import HomeView from '../views/HomeView.vue'
+// import { id } from 'element-plus/es/locale'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
               component: () => import('../views/visitor/VisitorApplication.vue')
             },
           ]
+        },
+        {
+          path: 'room',
+          name: 'room',
+          component: () => import('../views/room/RoomList.vue')
         }
       ]
     },
