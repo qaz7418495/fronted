@@ -81,5 +81,8 @@ import LoginForm from './LoginForm.vue';
 	.slogen{
 		display: none;
 	}
+	.buildings{
+		display: none;
+	}
 }
 </style>

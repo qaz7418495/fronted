@@ -1,71 +1,73 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import {useGlobalState} from "../stores/state"
-import { ElNotification } from 'element-plus'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import { useGlobalState } from "../stores/state";
+import { ElNotification } from "element-plus";
+import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: HomeView,
       children: [
         // 客户端
         {
-          path: '/client',
-          name:"client",
-          meta:{
-            userType:0,
+          path: "/client",
+          name: "client",
+          meta: {
+            userType: 0,
           },
-          children:[
+          children: [
             {
-              path: '/vistorapplication',
-              name: '访客申请',
-              component: () => import('../views/visitor/VisitorApplication.vue')
+              path: "/vistorapplication",
+              name: "访客申请",
+              component: () =>
+                import("../views/visitor/VisitorApplication.vue"),
             },
-          ]
+          ],
         },
         // 维修人员
         {
-          path:"/chores",
-          name:"chores",
-          meta:{
-            userType:1,
+          path: "/chores",
+          name: "chores",
+          meta: {
+            userType: 1,
           },
-          children:[
+          children: [
             {
-              path: 'vistorapplication',
-              name: '访客申请',
-              component: () => import('../views/visitor/VisitorApplication.vue')
+              path: "vistorapplication",
+              name: "访客申请",
+              component: () =>
+                import("../views/visitor/VisitorApplication.vue"),
             },
-          ]
+          ],
         },
         // 管理员
         {
-          path:"/admin",
-          name:"admin",
-          meta:{
-            userType:2,
+          path: "/admin",
+          name: "admin",
+          meta: {
+            userType: 2,
           },
-          children:[
+          children: [
             {
-              path: 'vistorapplication',
-              name: '访客申请',
-              component: () => import('../views/visitor/VisitorApplication.vue')
+              path: "vistorapplication",
+              name: "访客申请",
+              component: () =>
+                import("../views/visitor/VisitorApplication.vue"),
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/account/Login.vue')
+      path: "/login",
+      name: "login",
+      component: () => import("../views/account/Login.vue"),
     },
-    
-  ]
-})
+  ],
+});
 router.beforeEach((to, from) => {
   // TODO: Add authentication logic here
   const globalState = useGlobalState();
@@ -74,24 +76,23 @@ router.beforeEach((to, from) => {
                   维修人员（包括其他物业人员）->1
                   管理员->2
   */
- if(!globalState.isLogin&&to.name!=='login'){
+  if (!globalState.isLogin && to.name !== "login") {
     ElNotification({
       title: "很遗憾",
       message: "请先登录",
       type: "error",
-      duration: 3000
-    })
-    return {name:'login'}
- }
- else{
-  if(globalState.userType!==to.meta.userType){
-    ElNotification({
-      title: "很遗憾",
-      message: "您没有权限访问该页面",
-      type: "error",
-      duration: 3000
-    })
+      duration: 3000,
+    });
+    return { name: "login" };
+  } else {
+    if (to.meta.userType && globalState.userType !== to.meta.userType) {
+      ElNotification({
+        title: "很遗憾",
+        message: "您没有权限访问该页面",
+        type: "error",
+        duration: 3000,
+      });
+    }
   }
- }
-})
-export default router
+});
+export default router;

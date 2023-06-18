@@ -172,7 +172,7 @@ onMounted(() => {
 		width: 420px;
 		padding: 50px 40px 45px;
 		border-radius: 10px;
-		box-shadow: 0 0.7px 1.7px rgba(0, 0, 0, 0.248);
+		box-shadow: 0 0.7px 1.7px rgba(0, 0, 0, 0.6);
 		.login-logo {
 			display: flex;
 			align-items: center;
