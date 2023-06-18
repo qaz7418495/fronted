@@ -1,23 +1,25 @@
 import {defineStore} from 'pinia'
 export const useGlobalState = defineStore({
     id: 'globalState',
-    state: () => ({
-        return:{
+    state: () => {
+        return {
             token: localStorage.getItem('token') || '',
-            userType: JSON.parse(localStorage.getItem('userType')) || {},
+            userType: Number(localStorage.getItem('userType')) || 0,
+            userInformation: JSON.parse(localStorage.getItem('userInformation')) || {},
         }
-    }),
+    },
     getters: {
-        isLogin: (state) => (state.token !== ''),
+        isLogin: (state) => (state.userInformation?.id !== undefined),
     },
     actions: {
         setToken(token){
             this.token = token;
             localStorage.setItem('token', token);
         },
-        setUserType(userType){
-            this.userType = userType;
-            localStorage.setItem('userType', JSON.stringify(userType));
+        setUserInformation(userInformation){
+            this.userInformation = userInformation;
+            localStorage.setItem('userType', userInformation.user_type);
+            localStorage.setItem('userInformation', JSON.stringify(userInformation));
         }
     }
 })

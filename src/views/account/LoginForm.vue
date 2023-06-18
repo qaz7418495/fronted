@@ -1,8 +1,8 @@
 <template>
 	<div class="login-form">
 		<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
-			<el-form-item prop="username">
-				<el-input v-model="loginForm.username" placeholder="手机号">
+			<el-form-item prop="phone_number">
+				<el-input v-model="loginForm.phone_number" placeholder="手机号">
 					<template #prefix>
 						<el-icon class="el-input__icon"><user /></el-icon>
 					</template>
@@ -14,7 +14,7 @@
 						<el-icon class="el-input__icon"><lock /></el-icon>
 					</template>
 					<template #append>
-						获取验证码
+						<el-button @click="postCode">{{ appendText }}</el-button>
 					</template>
 				</el-input>
 			</el-form-item>
@@ -28,7 +28,6 @@
 </template>
 <script setup>
 import { CirclePlus, UserFilled } from "@element-plus/icons-vue";
-import { ElNotification } from "element-plus";
 import { useGlobalState } from "../../stores/state.js";
 import { Account } from "../../api/account";
 import { useRoute,useRouter } from "vue-router";
@@ -36,43 +35,46 @@ const globalState = useGlobalState();
 const router = useRouter();
 const loginFormRef = ref();
 const route = useRoute();
+const appendText = ref("获取验证码");
 const validateName = (rule,value,callback)=>{
-	if(!value.length){
-		callback(new Error("请输入用户名"))
+	if(!value.length||!/^1[3456789]\d{9}$/.test(value)){
+		callback(new Error("请输入正确格式手机号"))
 	}else{
 		callback();
 	}
 }
 const validatePassword = (rule,value,callback)=>{
 	if(!value.length){
-		callback(new Error("请输入密码"))
+		callback(new Error("请输入验证码"))
 	}else{
 		callback();
 	}
 }
 const loginRules = ref({
-	username: [{validator:validateName, trigger: "blur" }],
+	phone_number: [{validator:validateName, trigger: "blur" }],
 	password: [{validator:validatePassword, trigger: "blur" }]
 });
 const loginForm = ref({
-    username:"",
+    phone_number:"",
     password:""
 })
 // 禁用登录按钮
 const disabled = computed(()=>{
-	return !(loginForm.value.username.length && loginForm.value.password.length);
+	return !(loginForm.value.phone_number.length && loginForm.value.password.length);
 })
 const login = ()=>{
 	Account.login(loginForm.value).then((res)=>{
 		if(res.data.result===1){
+			console.log(res.data);
 			globalState.setToken(res.data.token);
-			globalState.setUserType(res.data.userType);
+			globalState.setUserInformation(res.data.user_information);
 			ElNotification({
-				title: getTimeState(),
-				message: `${res.data.user.username}`,
+				title: "恭喜你",
+				message: res.data.message,
 				type: "success",
 				duration: 3000
-			});
+			})
+			router.push({name:"client"});
 		}
 		else{
 			ElNotification({
@@ -89,6 +91,55 @@ const login = ()=>{
 				type: "error",
 				duration: 3000
 			})
+	})
+}
+const postCode = ()=>{
+	if(!/^1[3456789]\d{9}$/.test(loginForm.value.phone_number)){
+		ElNotification({
+				title: "很遗憾",
+				message: "请输入正确格式手机号",
+				type: "error",
+				duration: 3000
+		})
+		return;
+	}
+	if(appendText.value!="获取验证码") return;
+	Account.postCode({
+		phone_number:loginForm.value.phone_number
+	}).then((res)=>{
+		if(res.data.result==1){
+			ElNotification({
+				title: "请查验",
+				message: res.data.message,
+				type: "success",
+				duration: 3000
+			})
+			let time = 60;
+			appendText.value = `${time}s后重新获取`;
+			let timer = setInterval(()=>{
+				time--;
+				appendText.value = `${time}s后重新获取`;
+				if(time===0){
+					appendText.value = "获取验证码";
+					clearInterval(timer);
+				}
+			},1000)
+		}
+		else{
+			ElNotification({
+				title: "很遗憾",
+				message: res.data.message,
+				type: "error",
+				duration: 3000
+			})
+		}
+	}).catch((err)=>{
+		ElNotification({
+				title: "很遗憾",
+				message: err.message,
+				type: "error",
+				duration: 3000
+		})
 	})
 }
 // 提交前进行表单验权
