@@ -90,16 +90,16 @@ router.beforeEach((to, from) => {
       duration: 3000,
     });
     return { name: "login" };
-  } else {
-    if (to.meta.userType && globalState.userType !== to.meta.userType) {
-      ElNotification({
-        title: "很遗憾",
-        message: "您没有权限访问该页面",
-        type: "error",
-        duration: 3000,
-      });
-    }
-    return {name: to.name};
-  }
+  } 
+  // else {
+  //   if (to.meta.userType && globalState.userType !== to.meta.userType) {
+  //     ElNotification({
+  //       title: "很遗憾",
+  //       message: "您没有权限访问该页面",
+  //       type: "error",
+  //       duration: 3000,
+  //     });
+  //   }
+  // }
 });
 export default router;
