@@ -11,65 +11,37 @@ const router = createRouter({
       name: "home",
       component: HomeView,
       children: [
-        // 客户端
+        /* LLLeo's comment: 
+          用户分为三种： 
+                        普通用户->0
+                        维修人员（包括其他物业人员）->1
+                        管理员->2
+                        均有权限访问的页面->-1
+        */
         {
-          path: "/client",
-          name: "client",
           meta: {
-            userType: 0,
+            userType: -1,
           },
-          children: [
-            {
-              path: "/vistorapplication",
-              name: "访客申请",
-              component: () =>
-                import("../views/visitor/VisitorApplication.vue"),
-            },
-          ],
-        },
-        // 维修人员
-        {
-          path: "/chores",
-          name: "chores",
-          meta: {
-            userType: 1,
-          },
-          children: [
-            {
-              path: "vistorapplication",
-              name: "访客申请",
-              component: () =>
-                import("../views/visitor/VisitorApplication.vue"),
-            },
-          ],
-        },
-        // 管理员
-        {
-          path: "/admin",
-          name: "admin",
-          meta: {
-            userType: 2,
-          },
-          children: [
-            {
-              path: "vistorapplication",
-              name: "访客申请",
-              component: () =>
-                import("../views/visitor/VisitorApplication.vue"),
-            },
-            {
-              path: "systemusermanage",
-              name: "系统人员管理",
-              component: () =>
-                import("../views/systemusermanage/ManagersManage.vue"),
-            },
-          ],
+          path: "/vistorapplication",
+          name: "访客申请",
+          component: () => import("../views/visitor/VisitorApplication.vue"),
         },
         {
           path: 'room',
           name: 'room',
+          meta: {
+            userType: 1,
+          },
           component: () => import('../views/room/RoomList.vue')
-        }
+        },
+        {
+          meta: {
+            userType: 2,
+          },
+          path: "systemusermanage",
+          name: "系统人员管理",
+          component: () => import("../views/systemusermanage/ManagersManage.vue"),
+        },
       ],
     },
     {
@@ -96,15 +68,15 @@ router.beforeEach((to, from) => {
     });
     return { name: "login" };
   } 
-  // else {
-  //   if (to.meta.userType && globalState.userType !== to.meta.userType) {
-  //     ElNotification({
-  //       title: "很遗憾",
-  //       message: "您没有权限访问该页面",
-  //       type: "error",
-  //       duration: 3000,
-  //     });
-  //   }
-  // }
+  else {
+    if (to.meta.userType && globalState.userType < to.meta.userType) {
+      ElNotification({
+        title: "很遗憾",
+        message: "您没有权限访问该页面",
+        type: "error",
+        duration: 3000,
+      });
+    }
+  }
 });
 export default router;
