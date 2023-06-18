@@ -1,10 +1,14 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+const noSpace = {
+  autoInsertSpace: false
+}
 </script>
 
 <template>
-  <RouterView />
+  <el-config-provider :locale="zhCn" :button="noSpace">
+    <RouterView />
+   </el-config-provider>
 </template>
 
 <style scoped>
