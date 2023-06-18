@@ -1,11 +1,12 @@
 <template>
 	<div class="login-container">
 		<div class="login-box">
+			<img src="../../assets/buildings.png" alt="logo" class="buildings">
 			<div class="slogen">
                <div class="slogen-title">
                     欢迎登录
                     <br/>
-                    super-2021
+                    Super-2021
                 </div>
                <div class="slogen-dis">
                 	大厦管理系统
@@ -23,6 +24,14 @@ import LoginForm from './LoginForm.vue';
 <style scoped lang="scss">
 .login-container {
 	height:100%;
+	.buildings{
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 52%;
+		object-fit: cover;
+		z-index: 0;
+	}
 	.login-box{
 		z-index: 2;
 		position: absolute;
@@ -70,6 +79,9 @@ import LoginForm from './LoginForm.vue';
 		transform: translate(-50%, -50%);
 	}
 	.slogen{
+		display: none;
+	}
+	.buildings{
 		display: none;
 	}
 }
