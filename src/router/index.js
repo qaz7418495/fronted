@@ -9,7 +9,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      redirect: "/room",
+      redirect: "/room-manage",
       component: HomeView,
       children: [
         /* LLLeo's comment: 
@@ -23,25 +23,33 @@ const router = createRouter({
           meta: {
             userType: 0,
           },
-          path: "/vistorapplication",
+          path: "/vistor-application-manage",
           name: "访客申请",
-          component: () => import("../views/visitor/VisitorApplication.vue"),
+          component: () => import("../views/visitor/VisitorApplicationManage.vue"),
         },
         {
           meta: {
             userType: 0,
           },
-          path: '/room',
+          path: '/room-manage',
           name: 'room',
-          component: () => import('../views/room/RoomList.vue')
+          component: () => import('../views/room/RoomManage.vue')
         },
         {
           meta: {
             userType: 2,
           },
-          path: "/systemusermanage",
+          path: "/client-manage",
+          name: "租户管理",
+          component: () => import("../views/client/ClientManage.vue"),
+        },
+        {
+          meta: {
+            userType: 2,
+          },
+          path: "/systemuser-manage",
           name: "系统人员管理",
-          component: () => import("../views/systemusermanage/SystemUserManage.vue"),
+          component: () => import("../views/systemuser/SystemUserManage.vue"),
         },
       ],
     },

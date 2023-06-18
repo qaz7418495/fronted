@@ -11,15 +11,24 @@
       </div>
       <div class="line"></div>
       <div class="menu">
-        <div class="item" @click="extendNav">
+        <RouterLink 
+          v-for="navItem in navItemList" 
+          :to="navItem.navItemLink" 
+          style="text-decoration: none; color: rgba(255, 255, 255, 0.6);"
+        >
+          <div class="item" @click="extendNav">
+            <div class="light"></div>
+            <div class="licon"><span class="iconfont" :class="navItem.navItemIcon"></span></div>
+            <div class="con">{{navItem.navItemText}}</div>
+          </div>
+        </RouterLink>
+        <!-- <div class="item" @click="extendNav">
           <div class="light"></div>
-          <!-- <div class="licon"><span class="iconfont icon-wenjian"></span></div> -->
           <div class="licon"><span class="iconfont icon-Icon_wenjian"></span></div>
           <div class="con">租户管理</div>
         </div>
         <div class="item" @click="extendNav">
           <div class="light"></div>
-          <!-- <div class="licon"><span class="iconfont icon-qipao1"></span></div> -->
           <div class="licon"><span class="iconfont icon-wechat"></span></div>
           <div class="con">系统人员</div>
         </div>
@@ -36,7 +45,7 @@
             <span class="iconfont icon-shezhi"></span>
           </div>
           <div class="con">访客管理</div>
-        </div>
+        </div> -->
       </div>
       <div class="line"></div>
     </div>
@@ -49,13 +58,72 @@
   </div>
 </template>
 
+<script>
+const ALL_ROLES_NAV_ARRAY = [
+  [
+    {
+      navItemText: "房间管理",
+      navItemIcon: "icon-shipinhuiyi",
+      navItemLink: "/room-manage"
+    },
+    {
+      navItemText: "访客管理",
+      navItemIcon: "icon-shezhi",
+      navItemLink: "/vistor-application-manage"
+    },
+  ],
+  [
+    {
+      navItemText: "房间管理",
+      navItemIcon: "icon-shipinhuiyi",
+      navItemLink: "/room-manage"
+    },
+  ],
+  [
+    {
+      navItemText: "租户管理",
+      navItemIcon: "icon-Icon_wenjian",
+      navItemLink: "/client-manage"
+    },
+    {
+      navItemText: "系统人员",
+      navItemIcon: "icon-wechat",
+      navItemLink: "/systemuser-manage"
+    },
+    {
+      navItemText: "房间管理",
+      navItemIcon: "icon-shipinhuiyi",
+      navItemLink: "/room-manage"
+    },
+    {
+      navItemText: "访客管理",
+      navItemIcon: "icon-shezhi",
+      navItemLink: "/vistor-application-manage"
+    },
+  ],
+]
+</script>
+
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useGlobalState } from '../stores/state';
+import { assert } from '@vueuse/core';
+
+const globalState = useGlobalState();
+
 
 const navTarget = ref(null);
 const extendNav = () => {
   navTarget.value.classList.toggle("extend");
 }
+
+const navItemList = ref([]);
+onMounted(() => {
+  console.log(globalState.userType, Number(localStorage.getItem('userType')));
+  assert(globalState.userType !== -1);
+  navItemList.value = ALL_ROLES_NAV_ARRAY[ globalState.userType ];
+});
+
 </script>
 
 
@@ -64,7 +132,6 @@ const extendNav = () => {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: rgba(255, 255, 255, 0.6);
 }
 /* 清除外边距折叠和高度塌陷 */
 .clearfix::before,
@@ -89,6 +156,7 @@ const extendNav = () => {
   /* border-radius: 20px; */
   overflow: hidden;
   transition: 0.5s;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .nav.extend {
@@ -260,6 +328,7 @@ const extendNav = () => {
   border: solid 1px #de1616;
   transition: 0.5s;
   color: black;
+  z-index: 9999;
 }
 
 /* #endregion页面 header */
@@ -278,6 +347,8 @@ const extendNav = () => {
   box-sizing: border-box;
   border: #62cb44 1px solid;
   transition: 0.5s;
+  z-index: 9998;
+  overflow: hidden;
 }
 /* #endregion页面整体 body */
 
