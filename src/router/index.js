@@ -33,6 +33,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/account/Login.vue')
     },
+    {
+      path: '/vistorapplication',
+      name: '访客申请',
+      component: () => import('../views/visitor/VisitorApplication.vue')
+    }
   ]
 })
 router.beforeEach((to, from) => {

@@ -11,7 +11,7 @@
         <el-dialog v-model="addVistorDialog" title="访客申请">
             <span class="left-tab">到访时间</span>
             <el-date-picker v-model="newVisitor.reservation_time" type="datetime" placeholder="Pick a Date"
-                format="YYYY/MM/DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="setDisableDate"/>
+                format="YYYY/MM/DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="setDisableDate"/><br />
             <span class="left-tab">姓名</span>
             <el-input v-model="newVisitor.name"></el-input>
             <span class="left-tab">身份证号</span>
@@ -95,7 +95,7 @@ onMounted(() => {
     getVisitorList()
 })
 </script>
-<style scoped>
+<style   scoped>
 .main-wrap {
     width: 100%;
     height: 100%;
