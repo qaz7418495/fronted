@@ -57,6 +57,12 @@ const router = createRouter({
               component: () =>
                 import("../views/visitor/VisitorApplication.vue"),
             },
+            {
+              path: "systemusermanage",
+              name: "系统人员管理",
+              component: () =>
+                import("../views/systemusermanage/ManagersManage.vue"),
+            },
           ],
         },
       ],
