@@ -10,7 +10,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      // children: [
+      children: [
+        {
+          path: 'room',
+          name: 'room',
+          component: () => import('../views/room/RoomList.vue')
+        }
       //   // 客户端
       //   {
 
@@ -23,7 +28,7 @@ const router = createRouter({
       //   {
           
       //   }
-      // ]
+      ]
     },
     {
       path: '/login',
