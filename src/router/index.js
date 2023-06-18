@@ -91,8 +91,6 @@ router.beforeEach((to, from) => {
       type: "error",
       duration: 3000
     })
-    let name = globalState.userType==0?'client':(globalState.userType===1?'chores':'admin');
-    return {name}
   }
  }
 })
