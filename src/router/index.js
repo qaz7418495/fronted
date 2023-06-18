@@ -9,6 +9,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
+      redirect: "/room",
       component: HomeView,
       children: [
         /* LLLeo's comment: 
@@ -20,31 +21,34 @@ const router = createRouter({
         */
         {
           meta: {
-            userType: -1,
+            userType: 0,
           },
           path: "/vistorapplication",
           name: "访客申请",
           component: () => import("../views/visitor/VisitorApplication.vue"),
         },
         {
-          path: 'room',
-          name: 'room',
           meta: {
-            userType: 1,
+            userType: 0,
           },
+          path: '/room',
+          name: 'room',
           component: () => import('../views/room/RoomList.vue')
         },
         {
           meta: {
             userType: 2,
           },
-          path: "systemusermanage",
+          path: "/systemusermanage",
           name: "系统人员管理",
           component: () => import("../views/systemusermanage/ManagersManage.vue"),
         },
       ],
     },
     {
+      meta: {
+        userType: -1,
+      },
       path: "/login",
       name: "login",
       component: () => import("../views/account/Login.vue"),
@@ -68,15 +72,13 @@ router.beforeEach((to, from) => {
     });
     return { name: "login" };
   } 
-  else {
-    if (to.meta.userType && globalState.userType < to.meta.userType) {
-      ElNotification({
-        title: "很遗憾",
-        message: "您没有权限访问该页面",
-        type: "error",
-        duration: 3000,
-      });
-    }
+  if (to.meta.userType && globalState.userType < to.meta.userType) {
+    ElNotification({
+      title: "很遗憾",
+      message: "您没有权限访问该页面",
+      type: "error",
+      duration: 3000,
+    });
   }
 });
 export default router;
