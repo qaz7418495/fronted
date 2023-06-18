@@ -11,13 +11,13 @@
         <el-dialog v-model="addVistorDialog" title="访客申请">
             <span class="left-tab">到访时间</span>
             <el-date-picker v-model="newVisitor.reservation_time" type="datetime" placeholder="Pick a Date"
-                format="YYYY/MM/DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="setDisableDate"/><br />
+                format="YYYY/MM/DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="setDisableDate" class="right-content"/><br />
             <span class="left-tab">姓名</span>
-            <el-input v-model="newVisitor.name"></el-input>
+            <el-input v-model="newVisitor.name" class="right-content"></el-input>
             <span class="left-tab">身份证号</span>
-            <el-input v-model="newVisitor.id_number"></el-input>
+            <el-input v-model="newVisitor.id_number" class="right-content"></el-input>
             <span class="left-tab">手机号</span>
-            <el-input v-model="newVisitor.phone_number"></el-input>
+            <el-input v-model="newVisitor.phone_number" class="right-content"></el-input>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="cancelAddVisior()">取消</el-button>
@@ -95,11 +95,18 @@ onMounted(() => {
     getVisitorList()
 })
 </script>
-<style   scoped>
+<style lang="scss" scoped>
 .main-wrap {
     width: 100%;
     height: 100%;
     padding: 20px;
 
+    .left-tab {
+        
+    }
+
+    .right-content {
+        max-width: 300px;
+    }
 }
 </style>
