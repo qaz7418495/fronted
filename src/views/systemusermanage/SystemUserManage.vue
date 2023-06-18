@@ -1,59 +1,60 @@
 <template>
-    啥都没有啊
     <div class="main-warp">
         <!-- 分页 -->
-        <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+        <el-tabs v-model="activeName" class="demo-tabs">
             <el-tab-pane label="管理人员" name="manager">
                 <el-button @click="addManager()" class="btn addBtn">添加管理人员</el-button>
-                <el-table v-if="managerList.length == 0">
-                    <el-table-column prop="manager_name" label="姓名" />
+                <el-table v-if="managerList.length != 0" :data="managerList" >
+                    <el-table-column prop="name" label="姓名" />
                     <!-- <el-table-column prop="id_number" label="Name" width="180" /> -->
                     <el-table-column prop="phone_number" label="手机号" />
                     <el-table-column label="操作">
                         <template #default="scope">
-                            <el-button link type="warning" size="small" @click.prevent="editUser(scope.$index)">
+                            <el-button type="warning" @click.prevent="editUser(scope.row)">
                                 修改
                             </el-button>
-                            <el-button link type="error" size="small" @click.prevent="deleteUser(scope.$index)">
+                            <el-button type="danger" @click.prevent="deleteUser(scope.row)">
                                 删除
                             </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-empty v-else description="暂无信息"></el-empty>
+                <!-- {{ managerList }} -->
             </el-tab-pane>
             <el-tab-pane label="维修人员" name="worker">
                 <el-button @click="addManager()" class="btn addBtn">添加维修人员</el-button>
-                <el-table v-if="workerList.length == 0">
-                    <el-table-column prop="maintain_name" label="姓名" />
+                <el-table v-if="workerList.length != 0" :data="workerList" >
+                    <el-table-column prop="name" label="姓名" />
                     <!-- <el-table-column prop="id_number" label="Name" width="180" /> -->
                     <el-table-column prop="phone_number" label="手机号" />
                     <el-table-column label="类型">
                         <template #default="scope">
-                            {{ scope }}
+                            {{ workerType[scope.row.job] }}
                         </template>
                     </el-table-column>
                     <el-table-column label="状态">
                         <template #default="scope">
-                            {{ scope }}
+                            {{ scope.row.is_free ? '空闲' : '非空闲' }}
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
                         <template #default="scope">
-                            <el-button link type="warning" size="small" @click.prevent="editUser(scope.$index)">
+                            <el-button link type="warning"  @click.prevent="editUser(scope.row)">
                                 修改
                             </el-button>
-                            <el-button link type="error" size="small" @click.prevent="deleteUser(scope.$index)">
+                            <el-button link type="danger"  @click.prevent="deleteUser(scope.row)">
                                 删除
                             </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-empty v-else description="暂无信息"></el-empty>
+                {{ workerList }}
             </el-tab-pane>
         </el-tabs>
         <!-- 添加 / 编辑人员弹出框 管理人员/维修人员 -->
-        <el-dialog v-model="addDialog" :title="activeName == 'manager' ? '添加管理人员' : '添加维修人员'" width="500">
+        <el-dialog v-model="addDialog" :title="selectTitle()" width="500">
             <div class="add-dialog-item" v-if="activeName == 'manager'">
                 <span class="left-tab">管理员姓名</span>
                 <el-input v-model="newUser.manager_name" class="right-content"></el-input>
@@ -69,9 +70,9 @@
             <div class="add-dialog-item" v-if="activeName == 'worker'">
                 <span class="left-tab">维修人员类型</span>
                 <el-select v-model="newUser.job" placeholder="类型" class="right-content">
-                    <el-option label="机械工" value="2" />
-                    <el-option label="电工" value="1" />
-                    <el-option label="水工" value="0" />
+                    <el-option label="机械工" :value="2" />
+                    <el-option label="电工" :value="1" />
+                    <el-option label="水工" :value="0" />
                 </el-select>
             </div>
             <!-- <div class="add-dialog-item" v-if="activeName == 'worker' && editMode">
@@ -89,18 +90,17 @@
             </template>
         </el-dialog>
         <!-- 删除人员确认弹出框 -->
-        <el-dialog v-model="delDialog" title="activeName == '确认删除吗？" width="500">
+        <el-dialog v-model="delDialog" title="确认删除吗？" width="500">
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="cancelDelUser()">取消</el-button>
-                    <el-button type="primary" @click="delUserConfirm()">{{ editMode ? '保存' : '添加' }}</el-button>
+                    <el-button type="danger" @click="delUserConfirm()">删除</el-button>
                 </span>
             </template>
         </el-dialog>
     </div>
 </template>
 <script setup>
-import { onMounted } from 'vue';
 import { SystemUserManage } from '../../api/systemuser'
 // tab记录
 const activeName = ref('manager')
@@ -140,10 +140,13 @@ const workerList = ref([
         "id": 1,
         "name": "维修工侯博",
         "phone_number": "15175667868",
-        "job": 3,
+        "job": 0,
         "is_free": true
     }
 ])
+
+// 修理类型
+const workerType = ['水工', '电工', '机械工']
 
 // 控制添加人员信息的弹出框
 const addDialog = ref(false)
@@ -161,7 +164,7 @@ const newUser = ref({
 
 // 清空newUser
 const clearNewUser = () => {
-    newVisitor.value = {
+    newUser.value = {
         manager_name: '',
         maintain_name: '',
         phone_number: '',
@@ -173,6 +176,7 @@ const clearNewUser = () => {
 
 // 添加人员信息函数
 const addManager = () => {
+    editMode.value = false
     clearNewUser()
     addDialog.value = true
 }
@@ -184,15 +188,34 @@ const editMode = ref(false)
 const cancelAddUser = () => {
     clearNewUser()
     addDialog.value = false
+    editMode.value = false
+}
+
+// 编辑人员
+const editUser = (data) => {
+    // console.log('编辑人员', index)
+    editMode.value = true
+    newUser.value = data
+    if( activeName.value == 'manager' ) {
+        newUser.value.manager_name = data.name
+    } else {
+        newUser.value.maintain_name = data.name
+    }
+    addDialog.value = true
 }
 
 // 删除弹出框
 const delDialog = ref(false)
 
 // 删除人员
-const deleteUser = (index) => {
-    console.log('删除人员', index)
-    newUser.value = activeName == 'manager' ? managerList.value[index] : workerList.value[index]
+const deleteUser = (data) => {
+    console.log('删除人员', data)
+    newUser.value = data
+    if( activeName.value == 'manager' ) {
+        newUser.value.manager_name = data.name
+    } else {
+        newUser.value.maintain_name = data.name
+    }
     delDialog.value = true
 }
 
@@ -204,7 +227,7 @@ const cancelDelUser = () => {
 
 // 确定删除
 const delUserConfirm = () => {
-    if (activeName == 'manager') {
+    if (activeName.value == 'manager') {
         SystemUserManage.DelManager({
             manager_id: newUser.value.id
         }).then((res) => {
@@ -222,7 +245,7 @@ const delUserConfirm = () => {
             } else {
                 ElNotification({
                     title: "删除失败",
-                    message: "res.data.message",
+                    message: res.data.message,
                     type: "error",
                     duration: 3000
                 })
@@ -257,7 +280,7 @@ const delUserConfirm = () => {
             } else {
                 ElNotification({
                     title: "删除失败",
-                    message: "res.data.message",
+                    message: res.data.message,
                     type: "error",
                     duration: 3000
                 })
@@ -278,19 +301,25 @@ const delUserConfirm = () => {
 }
 
 // 检查信息是否完全有误 0 管理员 1 维修工
-const checkVisitor = () => {
-    for (key in newVisitor.value.keys) {
-        console.log(key)
-        if (newVisitor.value[key] == '') return false
+const checkVisitor = (type) => {
+    if(type == 0) {
+        // 管理员
+        console.log("管理人员", newUser.value)
+        if(!(newUser.value.manager_name && newUser.value.phone_number)) return false
+        else return true
+    } else {
+        console.log("维修人员", newUser.value)
+        if(!(newUser.value.maintain_name && newUser.value.phone_number)) return false
+        else return true
     }
 }
 
 // 添加用户或者编辑用户确认
 const addUserConfirm = () => {
-    switch (activeName) {
+    switch (activeName.value) {
         // 管理员的添加或者编辑
         case 'manager':
-            if (!editMode) { // 添加
+            if (!editMode.value) { // 添加
                 if (checkVisitor(0)) {// 信息无误
                     SystemUserManage.AddManager(newUser.value).then((res) => {
                         if (res.data.result == 1) {
@@ -306,7 +335,7 @@ const addUserConfirm = () => {
                         } else {
                             ElNotification({
                                 title: "添加失败",
-                                message: "res.data.message",
+                                message: res.data.message,
                                 type: "error",
                                 duration: 3000
                             })
@@ -350,7 +379,7 @@ const addUserConfirm = () => {
                         } else {
                             ElNotification({
                                 title: "修改失败",
-                                message: "res.data.message",
+                                message: res.data.message,
                                 type: "error",
                                 duration: 3000
                             })
@@ -369,6 +398,7 @@ const addUserConfirm = () => {
                         // getManagerList()
                         addDialog.value = false
                     })
+                    editMode.value = false
                 } else {
                     ElNotification({
                         title: "很遗憾",
@@ -381,8 +411,8 @@ const addUserConfirm = () => {
             }
             break
         case 'worker':
-            if (!editMode) { // 添加
-                if (checkVisitor(0)) {// 信息无误
+            if (!editMode.value) { // 添加
+                if (checkVisitor(1)) {// 信息无误
                     SystemUserManage.AddWorker(newUser.value).then((res) => {
                         if (res.data.result == 1) {
                             ElNotification({
@@ -397,7 +427,7 @@ const addUserConfirm = () => {
                         } else {
                             ElNotification({
                                 title: "添加失败",
-                                message: "res.data.message",
+                                message: res.data.message,
                                 type: "error",
                                 duration: 3000
                             })
@@ -426,7 +456,7 @@ const addUserConfirm = () => {
                     return
                 }
             } else { // 编辑
-                if (checkVisitor(0)) {// 信息无误
+                if (checkVisitor(1)) {// 信息无误
                     SystemUserManage.EditWorker(newUser.value).then((res) => {
                         if (res.data.result == 1) {
                             ElNotification({
@@ -441,7 +471,7 @@ const addUserConfirm = () => {
                         } else {
                             ElNotification({
                                 title: "修改失败",
-                                message: "res.data.message",
+                                message: res.data.message,
                                 type: "error",
                                 duration: 3000
                             })
@@ -449,6 +479,7 @@ const addUserConfirm = () => {
                             // getManagerList()
                             addDialog.value = false
                         }
+                        editMode.value = false
                     }).catch((err) => {
                         ElNotification({
                             title: "很遗憾",
@@ -480,7 +511,7 @@ const addUserConfirm = () => {
 //获取管理员列表
 const getManagerList = () => {
     SystemUserManage.GetManagerList({}).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data.result == 1) {
             ElNotification({
                 title: "获取管理员列表成功",
@@ -492,7 +523,7 @@ const getManagerList = () => {
         } else {
             ElNotification({
                 title: "获取失败",
-                message: "res.data.message",
+                message: res.data.message,
                 type: "error",
                 duration: 3000
             })
@@ -510,7 +541,7 @@ const getManagerList = () => {
 //获取维修人员列表
 const getWorkerList = () => {
     SystemUserManage.GetWorkList({}).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data.result == 1) {
             ElNotification({
                 title: "获取维修人员列表成功",
@@ -518,11 +549,11 @@ const getWorkerList = () => {
                 type: "success",
                 duration: 3000
             })
-            managerList.value = res.data.all_maintain_information
+            workerList.value = res.data.all_maintain_information
         } else {
             ElNotification({
                 title: "获取失败",
-                message: "res.data.message",
+                message: res.data.message,
                 type: "error",
                 duration: 3000
             })
@@ -535,6 +566,17 @@ const getWorkerList = () => {
             duration: 3000
         })
     })
+}
+
+// 根据不同的状体选择标题
+const selectTitle = () => {
+    if(activeName.value == 'manager') {
+        if(editMode.value) return '编辑管理员信息'
+        return '添加管理员信息'
+    } else {
+        if(editMode.value) return '编辑维修人员信息'
+        return '添加维修人员信息'
+    }    
 }
 
 onMounted(() => {
@@ -554,7 +596,7 @@ onMounted(() => {
 .left-tab {
     margin-right: 10px;
     display: inline-block;
-    width: 70px;
+    width: 90px;
     margin-bottom: 10px;
 }
 

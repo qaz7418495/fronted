@@ -29,7 +29,6 @@
     </div>
 </template>
 <script setup>
-import { onMounted } from 'vue';
 import { Visitor } from '../../api/visiorapplication';
 // 设置禁用时间
 const setDisableDate = (time) => {
