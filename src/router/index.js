@@ -99,6 +99,7 @@ router.beforeEach((to, from) => {
         duration: 3000,
       });
     }
+    return {name: to.name};
   }
 });
 export default router;
