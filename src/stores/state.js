@@ -4,7 +4,7 @@ export const useGlobalState = defineStore({
     state: () => ({
         return:{
             token: localStorage.getItem('token') || '',
-            userType: JSON.parse(localStorage.getItem('userType')) || {},
+            userType: JSON.parse(localStorage.getItem('userType')) || 0,
         }
     }),
     getters: {

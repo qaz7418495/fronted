@@ -10,41 +10,69 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      // children: [
-      //   // 客户端
-      //   {
-
-      //   },
-      //   // 维修人员
-      //   {
-
-      //   },
-      //   // 管理员
-      //   {
-          
-      //   }
-      // ]
+      children: [
+        // 客户端
+        {
+          path: '/client',
+          name:"client",
+          meta:{
+            userType:0,
+          },
+          children:[
+            {
+              path: '/vistorapplication',
+              name: '访客申请',
+              component: () => import('../views/visitor/VisitorApplication.vue')
+            },
+          ]
+        },
+        // 维修人员
+        {
+          path:"/chores",
+          name:"chores",
+          meta:{
+            userType:1,
+          },
+          children:[
+            {
+              path: 'vistorapplication',
+              name: '访客申请',
+              component: () => import('../views/visitor/VisitorApplication.vue')
+            },
+          ]
+        },
+        // 管理员
+        {
+          path:"/admin",
+          name:"admin",
+          meta:{
+            userType:2,
+          },
+          children:[
+            {
+              path: 'vistorapplication',
+              name: '访客申请',
+              component: () => import('../views/visitor/VisitorApplication.vue')
+            },
+          ]
+        }
+      ]
     },
     {
       path: '/login',
       name: 'login',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/account/Login.vue')
     },
-    {
-      path: '/vistorapplication',
-      name: '访客申请',
-      component: () => import('../views/visitor/VisitorApplication.vue')
-    }
+    
   ]
 })
 router.beforeEach((to, from) => {
   // TODO: Add authentication logic here
   const globalState = useGlobalState();
   /* LLLeo's comment: 
-    用户分为三种：普通用户、维修人员（包括其他物业人员）和管理员
+    用户分为三种： 普通用户->0
+                  维修人员（包括其他物业人员）->1
+                  管理员->2
   */
  if(!globalState.isLogin&&to.name!=='login'){
     ElNotification({
@@ -54,6 +82,18 @@ router.beforeEach((to, from) => {
       duration: 3000
     })
     return {name:'login'}
+ }
+ else{
+  if(globalState.userType!==to.meta.userType){
+    ElNotification({
+      title: "很遗憾",
+      message: "您没有权限访问该页面",
+      type: "error",
+      duration: 3000
+    })
+    let name = globalState.userType==0?'client':(globalState.userType===1?'chores':'admin');
+    return {name}
+  }
  }
 })
 export default router
