@@ -8,7 +8,7 @@
   const particleColor = ref("#FFFFFF");
   const particleNum = ref(180);
   const lineColor = ref("#FFFFFF");
-  const backgroundColor = ref("#040d21");
+  const backgroundColor = ref("#171829");
   
   onMounted(()=>{
     // 1. 创建画布对象  即创建canvas标签的DOM元素
