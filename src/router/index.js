@@ -1,15 +1,7 @@
-<<<<<<< HEAD
 import { createRouter, createWebHistory } from 'vue-router'
 import {useGlobalState} from "../stores/state"
 import { ElNotification } from 'element-plus'
 import HomeView from '../views/HomeView.vue'
-// import { id } from 'element-plus/es/locale'
-=======
-import { createRouter, createWebHistory } from "vue-router";
-import { useGlobalState } from "../stores/state";
-import { ElNotification } from "element-plus";
-import HomeView from "../views/HomeView.vue";
->>>>>>> c0e5581d703befe998f7ccecc54c87283e406c5d
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
