@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import {useGlobalState} from "../stores/state"
 import { ElNotification } from 'element-plus'
 import HomeView from '../views/HomeView.vue'
+// import { id } from 'element-plus/es/locale'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

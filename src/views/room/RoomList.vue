@@ -2,7 +2,7 @@
 <div>
     <div>
         <div class="cardBox"></div>	
-        <div style="display: flex">
+        <div style="display: flex; flex-wrap: wrap;">
             <div v-for="(i,index) in rooms" :key="index">
                 <el-card class="text item box-card greycard" v-if="i.room.repair_status == 0 && i.room.is_rent == false">
                     <!-- 是否租用改背景颜色 -->
@@ -32,7 +32,7 @@
                         <div class="text item">租用用户：{{i.user}}</div>
                     </div>
                 </el-card>
-                <el-card class="text item box-card redcard" v-if="(i.room.repair_status == 2 ? true : false)">
+                <el-card class="text item box-card bluecard" v-if="(i.room.repair_status == 2 ? true : false)">
                     <!-- 是否租用改背景颜色 -->
                     <div class="clearfix">
                         <span class="roomId">{{i.room.id}}</span>
