@@ -41,7 +41,7 @@ const router = createRouter({
           },
           path: "/systemusermanage",
           name: "系统人员管理",
-          component: () => import("../views/systemusermanage/ManagersManage.vue"),
+          component: () => import("../views/systemusermanage/SystemUserManage.vue"),
         },
       ],
     },
