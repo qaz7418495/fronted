@@ -52,8 +52,10 @@
       <div class="line"></div>
     </div>
     <div class="header">
-      <button @click="extendNav">展开</button>
-      xxxxx你试试
+      <div class="header-content">
+        <button @click="extendNav">展开</button>
+        xxxxx你试试
+      </div>
     </div>
     <div class="body">
       <RouterView/>
@@ -113,7 +115,7 @@ import { useGlobalState } from '../stores/state';
 import { assert } from '@vueuse/core';
 
 const globalState = useGlobalState();
-
+const headerHeight = ref("60px");
 
 const navTarget = ref(null);
 const extendNav = () => {
@@ -328,8 +330,10 @@ onMounted(() => {
   position: fixed;
   top: 0;
   right: 0;
-  height: 80px;
+  height: v-bind(headerHeight);
   width: calc(100% - 110px);
+  padding-top: 10px;
+  padding-bottom: 10px;
   box-sizing: border-box;
   background-color: white;
   /* box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)!important; */
@@ -341,6 +345,12 @@ onMounted(() => {
   font-family: Harmony_Regular, sans-serif!important;
 }
 
+.header .header-content {
+  width: 100%;
+  height: 100%;
+  border: #eb5a56 1px solid;
+}
+
 /* #endregion页面 header */
 
 /* #region页面整体 body */
@@ -350,10 +360,10 @@ onMounted(() => {
 
 .body {
   position: absolute;
-  top: 80px;
+  top: v-bind(headerHeight);
   right: 0;
   width: calc(100% - 110px);
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - v-bind(headerHeight));
   box-sizing: border-box;
   background-color: rgb(234, 239, 244);
   transition: 0.5s;
