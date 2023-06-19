@@ -36,7 +36,7 @@ export class SystemUserManage{
 
     static async DelWorker(data) {
         return await request({
-            url:url.login,
+            url:url.delWorker,
             method:"post",
             data
         })

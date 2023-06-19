@@ -1,6 +1,6 @@
 <template>
   <div class="main-wrap clearfix">
-    <div class="nav" ref="navTarget">
+    <div class="nav" ref="navTarget" @mouseenter="extendNav" @mouseleave="extendNav">
       <!--头像-->
       <div class="icon">
         <div class="icon-img"><img src="/hua.jpg" alt="" /></div>
@@ -330,11 +330,20 @@ onMounted(() => {
   background-color: white;
   /* box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)!important; */
   /* box-shadow: 0 2px 2px 0 rgba(0,0,0,.14); */
-  box-shadow: 0 1px 5px 0 rgba(0,0,0,.12)!important;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.12)!important;
   transition: 0.5s;
-  color: black;
+  background-color: white;
   z-index: 9999;
   font-family: Harmony_Regular, sans-serif!important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.route-name{
+  font-size: 25px;
+  font-weight: 500;
+  color: #000000;
+  margin-left: 20px;
 }
 
 .header .header-content {

@@ -1,13 +1,14 @@
 <template>
-    <div class="main-warp">
+    <div class="main-wrap">
         <!-- 分页 -->
         <el-tabs v-model="activeName" class="demo-tabs">
             <el-tab-pane label="管理人员" name="manager">
                 <el-button @click="addManager()" class="btn addBtn">添加管理人员</el-button>
-                <el-table v-if="managerList.length != 0" :data="managerList" >
+                <el-table v-if="managerList.length != 0" :data="managerList">
                     <el-table-column prop="name" label="姓名" />
                     <!-- <el-table-column prop="id_number" label="Name" width="180" /> -->
                     <el-table-column prop="phone_number" label="手机号" />
+                    <el-table-column prop="email" label="邮箱" />
                     <el-table-column label="操作">
                         <template #default="scope">
                             <el-button type="warning" @click.prevent="editUser(scope.row)">
@@ -28,6 +29,7 @@
                     <el-table-column prop="name" label="姓名" />
                     <!-- <el-table-column prop="id_number" label="Name" width="180" /> -->
                     <el-table-column prop="phone_number" label="手机号" />
+                    <el-table-column prop="email" label="邮箱" />
                     <el-table-column label="类型">
                         <template #default="scope">
                             {{ workerType[scope.row.job] }}
@@ -50,11 +52,11 @@
                     </el-table-column>
                 </el-table>
                 <el-empty v-else description="暂无信息"></el-empty>
-                {{ workerList }}
+                <!-- {{ workerList }} -->
             </el-tab-pane>
         </el-tabs>
         <!-- 添加 / 编辑人员弹出框 管理人员/维修人员 -->
-        <el-dialog v-model="addDialog" :title="selectTitle()" width="500">
+        <el-dialog v-model="addDialog" :title="selectTitle()" width="500" :append-to-body="false">
             <div class="add-dialog-item" v-if="activeName == 'manager'">
                 <span class="left-tab">管理员姓名</span>
                 <el-input v-model="newUser.manager_name" class="right-content"></el-input>
@@ -67,9 +69,13 @@
                 <span class="left-tab">手机号</span>
                 <el-input v-model="newUser.phone_number" class="right-content"></el-input>
             </div>
+            <div class="add-dialog-item">
+                <span class="left-tab">邮箱</span>
+                <el-input v-model="newUser.email" class="right-content"></el-input>
+            </div>
             <div class="add-dialog-item" v-if="activeName == 'worker'">
                 <span class="left-tab">维修人员类型</span>
-                <el-select v-model="newUser.job" placeholder="类型" class="right-content">
+                <el-select v-model="newUser.job" placeholder="类型" class="right-content" :teleported="false">
                     <el-option label="机械工" :value="2" />
                     <el-option label="电工" :value="1" />
                     <el-option label="水工" :value="0" />
@@ -110,26 +116,31 @@ const managerList = ref([
     {
         "id": 1,
         "name": "管理员一号",
+        "email": '20373638@buaa.edu.cn',
         "phone_number": "13632984172"
     },
     {
         "id": 2,
         "name": "管理员2号安璟坤",
+        "email": '20373638@buaa.edu.cn',
         "phone_number": "13120356833"
     },
     {
         "id": 3,
         "name": "管理员三号",
+        "email": '20373638@buaa.edu.cn',
         "phone_number": "15130585160"
     },
     {
         "id": 4,
         "name": "侯博",
+        "email": '20373638@buaa.edu.cn',
         "phone_number": "15175667868"
     },
     {
         "id": 6,
         "name": "封号斗罗",
+        "email": '20373638@buaa.edu.cn',
         "phone_number": "13171880545"
     }
 ])
@@ -141,6 +152,7 @@ const workerList = ref([
         "name": "维修工侯博",
         "phone_number": "15175667868",
         "job": 0,
+        "email": '20373638@buaa.edu.cn',
         "is_free": true
     }
 ])
@@ -157,9 +169,10 @@ const newUser = ref({
     manager_name: '',
     maintain_name: '',
     phone_number: '',
-    job: '0',
+    job: 0,
     if_free: true,
-    id: 12
+    id: 12,
+    email: '',
 })
 
 // 清空newUser
@@ -168,9 +181,10 @@ const clearNewUser = () => {
         manager_name: '',
         maintain_name: '',
         phone_number: '',
-        job: '0',
+        job: 0,
         if_free: true,
-        id: 12
+        id: 12,
+        email: '',
     }
 }
 
@@ -198,8 +212,10 @@ const editUser = (data) => {
     newUser.value = data
     if( activeName.value == 'manager' ) {
         newUser.value.manager_name = data.name
+        newUser.value.manager_id = data.id
     } else {
         newUser.value.maintain_name = data.name
+        newUser.value.maintain_id = data.id
     }
     addDialog.value = true
 }
@@ -308,12 +324,12 @@ const checkVisitor = (type) => {
         /* LLLeo's comment: 消除代码异味 */
         // if(!(newUser.value.manager_name && newUser.value.phone_number)) return false
         // else return true
-        return newUser.value.manager_name && newUser.value.phone_number;
+        return newUser.value.manager_name && newUser.value.phone_number && newUser.value.email;
     } else {
         console.log("维修人员", newUser.value)
         // if(!(newUser.value.maintain_name && newUser.value.phone_number)) return false
         // else return true
-        return newUser.value.maintain_name && newUser.value.phone_number;
+        return newUser.value.maintain_name && newUser.value.phone_number && newUser.value.email;
     }
 }
 
@@ -425,7 +441,7 @@ const addUserConfirm = () => {
                                 duration: 3000
                             })
                             clearNewUser()
-                            getWorkList()
+                            getWorkerList()
                             addDialog.value = false
                         } else {
                             ElNotification({
@@ -516,12 +532,12 @@ const getManagerList = () => {
     SystemUserManage.GetManagerList({}).then((res) => {
         // console.log(res)
         if (res.data.result == 1) {
-            ElNotification({
-                title: "获取管理员列表成功",
-                message: "获取管理员列表成功",
-                type: "success",
-                duration: 3000
-            })
+            // ElNotification({
+            //     title: "获取管理员列表成功",
+            //     message: "获取管理员列表成功",
+            //     type: "success",
+            //     duration: 3000
+            // })
             managerList.value = res.data.all_manager_information
         } else {
             ElNotification({
@@ -546,12 +562,12 @@ const getWorkerList = () => {
     SystemUserManage.GetWorkList({}).then((res) => {
         // console.log(res)
         if (res.data.result == 1) {
-            ElNotification({
-                title: "获取维修人员列表成功",
-                message: "获取维修人员列表成功",
-                type: "success",
-                duration: 3000
-            })
+            // ElNotification({
+            //     title: "获取维修人员列表成功",
+            //     message: "获取维修人员列表成功",
+            //     type: "success",
+            //     duration: 3000
+            // })
             workerList.value = res.data.all_maintain_information
         } else {
             ElNotification({
@@ -593,6 +609,11 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     padding: 20px;
+    
+    .addBtn {
+        float: right;
+        margin-bottom: 10px;
+    }
 }
 
 // 弹出框左侧标签
