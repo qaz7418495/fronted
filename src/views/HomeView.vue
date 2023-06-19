@@ -18,43 +18,23 @@
           :key="index"
           active-class="active"
         >
-          <div class="item" @click="extendNav">
+          <div class="item" @click="handleClickNavItem(navItem.navItemText)">
             <div class="light"></div>
             <div class="licon"><span class="iconfont" :class="navItem.navItemIcon"></span></div>
             <div class="con">{{navItem.navItemText}}</div>
           </div>
         </RouterLink>
-        <!-- <div class="item" @click="extendNav">
-          <div class="light"></div>
-          <div class="licon"><span class="iconfont icon-Icon_wenjian"></span></div>
-          <div class="con">租户管理</div>
-        </div>
-        <div class="item" @click="extendNav">
-          <div class="light"></div>
-          <div class="licon"><span class="iconfont icon-wechat"></span></div>
-          <div class="con">系统人员</div>
-        </div>
-        <div class="item" @click="extendNav">
-          <div class="light"></div>
-          <div class="licon">
-            <span class="iconfont icon-shipinhuiyi"></span>
-          </div>
-          <div class="con">房间管理</div>
-        </div>
-        <div class="item" @click="extendNav">
-          <div class="light"></div>
-          <div class="licon">
-            <span class="iconfont icon-shezhi"></span>
-          </div>
-          <div class="con">访客管理</div>
-        </div> -->
       </div>
       <div class="line"></div>
     </div>
     <div class="header">
       <div class="header-content">
-        <button @click="extendNav">展开</button>
-        xxxxx你试试
+        <div class="header-icon" @click="extendNav">
+          <span class="iconfont" :class="isNavExtended ? 'icon-shouqicaidan' : 'icon-zhankaicaidan'"></span>
+        </div>
+        <div class="header-nav-text" v-if="!isNavExtended">
+          {{ currentNavTextInHeader }}
+        </div>
       </div>
     </div>
     <div class="body">
@@ -86,6 +66,11 @@ const ALL_ROLES_NAV_ARRAY = [
   ],
   [
     {
+      navItemText: "房间管理",
+      navItemIcon: "icon-shipinhuiyi",
+      navItemLink: "/room-manage"
+    },
+    {
       navItemText: "租户管理",
       navItemIcon: "icon-Icon_wenjian",
       navItemLink: "/client-manage"
@@ -94,11 +79,6 @@ const ALL_ROLES_NAV_ARRAY = [
       navItemText: "系统人员",
       navItemIcon: "icon-wechat",
       navItemLink: "/systemuser-manage"
-    },
-    {
-      navItemText: "房间管理",
-      navItemIcon: "icon-shipinhuiyi",
-      navItemLink: "/room-manage"
     },
     {
       navItemText: "访客管理",
@@ -113,19 +93,31 @@ const ALL_ROLES_NAV_ARRAY = [
 import { onMounted, ref } from 'vue';
 import { useGlobalState } from '../stores/state';
 import { assert } from '@vueuse/core';
+import { useRouter } from 'vue-router';
 
 const globalState = useGlobalState();
+const router = useRouter();
 const headerHeight = ref("60px");
+const isNavExtended = ref(false);
+const currentNavTextInHeader = ref("");
 
 const navTarget = ref(null);
 const extendNav = () => {
+  isNavExtended.value = !isNavExtended.value;
   navTarget.value.classList.toggle("extend");
+}
+const handleClickNavItem = (text) => {
+  currentNavTextInHeader.value = text;
+  extendNav();
 }
 
 const navItemList = ref([]);
 onMounted(() => {
   assert(globalState.userType !== -1);
   navItemList.value = ALL_ROLES_NAV_ARRAY[ globalState.userType ];
+  currentNavTextInHeader.value = ALL_ROLES_NAV_ARRAY[ globalState.userType ].find(
+    item => item.navItemLink === router.currentRoute.value.fullPath
+  )?.navItemText;
 });
 
 </script>
@@ -300,7 +292,7 @@ onMounted(() => {
   opacity: 1;
 }
 
-.iconfont {
+.licon .iconfont {
   font-size: 26px;
 }
 
@@ -348,9 +340,26 @@ onMounted(() => {
 .header .header-content {
   width: 100%;
   height: 100%;
-  border: #eb5a56 1px solid;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  /* border: #eb5a56 1px solid; */
 }
 
+.header .header-content .header-icon {
+  float: left;
+  width: 30px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header-icon > .iconfont {
+  font-size: 26px;
+}
+.header .header-content .header-nav-text{
+  height: 100%;
+  font-size: 18px;
+}
 /* #endregion页面 header */
 
 /* #region页面整体 body */
