@@ -12,15 +12,15 @@
   
   onMounted(()=>{
     // 1. 创建画布对象  即创建canvas标签的DOM元素
-    var the_canvas = document.createElement("canvas");
+    let the_canvas = document.createElement("canvas");
     // 2. 找到上下文对象（画笔）
-    var context = the_canvas.getContext("2d");
+    let context = the_canvas.getContext("2d");
     // canvas 三要素之 id，作为canvas标签的唯一标识
-    var canvas_id = "c_n";
+    let canvas_id = "c_n";
     // canvas 三要素之 画布内容宽度 width 和 高度 height，和canvas标签的尺寸不一样
-    var canvas_width, canvas_height;
+    let canvas_width, canvas_height;
     // 当前鼠标放置的位置点
-    var current_point = {
+    let current_point = {
       x: null, //当前鼠标x
       y: null, //当前鼠标y
       max: 20000 // 圈半径的平方
@@ -44,9 +44,9 @@
     };
   
     // 包括当前鼠标所处位置的所有点的数组
-    var all_array = [];
+    let all_array = [];
     // 所有点的数组
-    var random_points = [];
+    let random_points = [];
   
     // 初始化画布
     the_canvas.id = canvas_id;
@@ -70,7 +70,7 @@
     const draw_canvas = () => {
       context.clearRect(0, 0, the_canvas.width, the_canvas.height);
   
-      var otherPoint, lineWidth, x_dist, y_dist, dist, e;
+      let  lineWidth, x_dist, y_dist, dist, e;
       // 逐点计算，绘制线条
   
       random_points.forEach( (item, index) => {
@@ -103,11 +103,9 @@
                  * 使得实现了粒子向着鼠标直接运动，形成“吸附”的感觉
                  */
                 e === current_point && 
-                dist >= e.max / 2 && 
-                (
-                  item.x -= 0.03 * x_dist, 
-                  item.y -= 0.03 * y_dist
-                ),
+                dist >= e.max / 2,
+                item.x -= 0.03 * x_dist, 
+                item.y -= 0.03 * y_dist,
                 lineWidth = (e.max - dist) / e.max,
                 // 设置开始路径
                 context.beginPath(),
@@ -138,15 +136,16 @@
         e = e || window.event;
         current_point.x = e.clientX;
         current_point.y = e.clientY;
-    }, window.onmouseout = function () {
+    }
+    window.onmouseout = function () {
         current_point.x = null;
         current_point.y = null;
     }; 
   
     // 随机生成 DEFAULT_CONFIG.count 个点的位置信息
-    for (var i = 0; DEFAULT_CONFIG.count > i; i++) {
+    for (let i = 0; DEFAULT_CONFIG.count > i; i++) {
           //随机位置
-      var x = random() * canvas_width, 
+      let x = random() * canvas_width, 
           y = random() * canvas_height,
           //随机运动速度（方向+大小）
           xa = 2 * random() - 1, 

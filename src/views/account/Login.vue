@@ -1,7 +1,7 @@
 <template>
 	<div class="login-container">
 		<div class="login-box">
-			<img src="../../assets/buildings.png" alt="logo" class="buildings">
+			<img src="../../assets/buildings_t.png" alt="logo" class="buildings">
 			<div class="slogen">
                <div class="slogen-title">
                     欢迎登录
@@ -26,11 +26,12 @@ import LoginForm from './LoginForm.vue';
 	height:100%;
 	.buildings{
 		position: absolute;
+		left:5%;
 		bottom: 0;
 		width: 100%;
-		height: 52%;
-		object-fit: cover;
+		height: 43%;
 		z-index: 0;
+		object-fit: cover;
 	}
 	.login-box{
 		z-index: 2;
