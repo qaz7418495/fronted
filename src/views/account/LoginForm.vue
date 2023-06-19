@@ -27,7 +27,7 @@
 	</div>
 </template>
 <script setup>
-import { CirclePlus, UserFilled } from "@element-plus/icons-vue";
+import { UserFilled } from "@element-plus/icons-vue";
 import { useGlobalState } from "../../stores/state.js";
 import { Account } from "../../api/account";
 import { useRoute,useRouter } from "vue-router";
