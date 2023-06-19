@@ -148,14 +148,6 @@ const submit = (formRef)=>{
 		if(valid) login();
 	})
 }
-onMounted(() => {
-	// 监听enter事件
-	document.onkeydown = (e) => {
-		if (route.name=="Login" && (e.code === "Enter" || e.code === "enter" || e.code === "NumpadEnter")) {
-			submit(loginFormRef.value);
-		}
-	};
-});
 </script>
 <style scoped lang="scss">
 :deep(.el-input__wrapper){

@@ -32,7 +32,7 @@ const router = createRouter({
             userType: 0,
           },
           path: '/room-manage',
-          name: 'room',
+          name: '房间管理',
           component: () => import('../views/room/RoomManage.vue')
         },
         {
@@ -58,7 +58,7 @@ const router = createRouter({
         userType: -1,
       },
       path: "/login",
-      name: "login",
+      name: "登录",
       component: () => import("../views/account/Login.vue"),
     },
   ],
@@ -71,14 +71,14 @@ router.beforeEach((to, from) => {
                   维修人员（包括其他物业人员）->1
                   管理员->2
   */
-  if (!globalState.isLogin && to.name !== "login") {
+  if (!globalState.isLogin && to.name !== "登录") {
     ElNotification({
       title: "很遗憾",
       message: "请先登录",
       type: "error",
       duration: 3000,
     });
-    return { name: "login" };
+    return { name: "登录" };
   } 
   if (to.meta.userType && globalState.userType < to.meta.userType) {
     ElNotification({
