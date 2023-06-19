@@ -1,9 +1,9 @@
 <template>
-    <div class="main-wrap">
+    <div class="main-wrap" id="shiny-shadow">
         <!-- 分页 -->
         <el-tabs v-model="activeName" class="demo-tabs">
             <el-tab-pane label="管理人员" name="manager">
-                <el-button @click="addManager()" class="btn addBtn">添加管理人员</el-button>
+                <button @click="addManager()" class="btn addBtn h-button">添加管理人员</button>
                 <el-table v-if="managerList.length != 0" :data="managerList">
                     <el-table-column prop="name" label="姓名" />
                     <!-- <el-table-column prop="id_number" label="Name" width="180" /> -->
@@ -612,6 +612,7 @@ onMounted(() => {
     
     .addBtn {
         float: right;
+        // margin-right: 20px;
         margin-bottom: 10px;
     }
 }
@@ -628,5 +629,55 @@ onMounted(() => {
 .right-content {
     max-width: 300px;
     margin: 10px 0px;
+}
+
+// 按钮
+#loading-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#shiny-shadow {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100vh;
+  background: #1c2541;
+}
+
+.h-button {
+  border: 2px solid white;
+  background: transparent;
+  text-transform: uppercase;
+  color: white;
+  padding: 10px 20px;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+}
+
+span {
+  z-index: 20;  
+}
+
+.h-button:after {
+  content: '';
+    display: block;
+    position: absolute;
+    top: -36px;
+    left: -100px;
+    background: white;
+    width: 50px;
+    height: 125px;
+    opacity: 20%;
+    transform: rotate(-45deg);
+}
+
+.h-button:hover:after {
+  left: 120%;
+  transition: all 600ms cubic-bezier(0.3, 1, 0.2, 1);
+   -webkit-transition: all 600ms cubic-bezier(0.3, 1, 0.2, 1);
 }
 </style>
