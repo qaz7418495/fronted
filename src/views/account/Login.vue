@@ -6,7 +6,7 @@
                <div class="slogen-title">
                     欢迎登录
                     <br/>
-                    Super-2021
+                    Good Bro Building
                 </div>
                <div class="slogen-dis">
                 	大厦管理系统
