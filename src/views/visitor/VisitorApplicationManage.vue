@@ -371,6 +371,7 @@ onMounted(() => {
 // 添加按钮
 .addBtn {
     float: right;
+    margin-bottom: 10px;
 }
 
 // 弹出框左侧标签

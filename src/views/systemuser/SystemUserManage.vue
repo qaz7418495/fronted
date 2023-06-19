@@ -612,6 +612,7 @@ onMounted(() => {
     
     .addBtn {
         float: right;
+        margin-bottom: 10px;
     }
 }
 
