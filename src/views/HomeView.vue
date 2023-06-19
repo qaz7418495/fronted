@@ -1,6 +1,6 @@
 <template>
   <div class="main-wrap clearfix">
-    <div class="nav" ref="navTarget" @mouseenter="extendNav" @mouseleave="extendNav">
+    <div class="nav" ref="navTarget">
       <!--头像-->
       <div class="icon">
         <div class="icon-img"><img src="/hua.jpg" alt="" /></div>
