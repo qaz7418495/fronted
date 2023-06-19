@@ -12,9 +12,11 @@
       <div class="line"></div>
       <div class="menu">
         <RouterLink 
-          v-for="navItem in navItemList" 
+          v-for="(navItem, index) in navItemList" 
           :to="navItem.navItemLink" 
           style="text-decoration: none; color: rgba(255, 255, 255, 0.6);"
+          :key="index"
+          active-class="active"
         >
           <div class="item" @click="extendNav">
             <div class="light"></div>
@@ -119,7 +121,6 @@ const extendNav = () => {
 
 const navItemList = ref([]);
 onMounted(() => {
-  console.log(globalState.userType, Number(localStorage.getItem('userType')));
   assert(globalState.userType !== -1);
   navItemList.value = ALL_ROLES_NAV_ARRAY[ globalState.userType ];
 });
@@ -237,9 +238,12 @@ onMounted(() => {
   position: relative;
   transition: 0.5s;
   border-radius: 6px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
-.item:hover {
+/* router-link active-class 对应的样式 */
+.item:hover, a.active > .item {
   /* background: rgba(255, 255, 255, 0.1); */
   background: rgba(255, 255, 255, 0.3);
 }
