@@ -53,6 +53,7 @@
     </div>
     <div class="header">
       <button @click="extendNav">展开</button>
+      xxxxx你试试
     </div>
     <div class="body">
       <RouterView/>
@@ -240,6 +241,7 @@ onMounted(() => {
   border-radius: 6px;
   margin-top: 2px;
   margin-bottom: 2px;
+  font-family:Harmony_Regular, 'Microsoft YaHei','微软雅黑', sans-serif!important;
 }
 
 /* router-link active-class 对应的样式 */
@@ -329,10 +331,14 @@ onMounted(() => {
   height: 80px;
   width: calc(100% - 110px);
   box-sizing: border-box;
-  border: solid 1px #de1616;
+  background-color: white;
+  /* box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)!important; */
+  /* box-shadow: 0 2px 2px 0 rgba(0,0,0,.14); */
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,.12)!important;
   transition: 0.5s;
   color: black;
   z-index: 9999;
+  font-family: Harmony_Regular, sans-serif!important;
 }
 
 /* #endregion页面 header */
@@ -347,9 +353,9 @@ onMounted(() => {
   top: 80px;
   right: 0;
   width: calc(100% - 110px);
-  height: 5000px;
+  min-height: calc(100vh - 80px);
   box-sizing: border-box;
-  border: #62cb44 1px solid;
+  background-color: rgb(234, 239, 244);
   transition: 0.5s;
   z-index: 9998;
   overflow: hidden;
