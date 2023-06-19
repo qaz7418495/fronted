@@ -70,7 +70,6 @@
 import { useGlobalState } from "../../stores/state.js";
 import { Room } from "../../api/room";
 import { useRoute,useRouter } from "vue-router";
-import { onBeforeMount } from "vue";
 const globalState = useGlobalState();
 const router = useRouter();
 const route = useRoute();

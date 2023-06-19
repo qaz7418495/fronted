@@ -321,12 +321,15 @@ const checkVisitor = (type) => {
     if(type == 0) {
         // 管理员
         console.log("管理人员", newUser.value)
-        if(!(newUser.value.manager_name && newUser.value.phone_number && newUser.value.email)) return false
-        else return true
+        /* LLLeo's comment: 消除代码异味 */
+        // if(!(newUser.value.manager_name && newUser.value.phone_number)) return false
+        // else return true
+        return newUser.value.manager_name && newUser.value.phone_number && newUser.value.email;
     } else {
         console.log("维修人员", newUser.value)
-        if(!(newUser.value.maintain_name && newUser.value.phone_number && newUser.value.email)) return false
-        else return true
+        // if(!(newUser.value.maintain_name && newUser.value.phone_number)) return false
+        // else return true
+        return newUser.value.maintain_name && newUser.value.phone_number && newUser.value.email;
     }
 }
 

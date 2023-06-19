@@ -128,7 +128,8 @@ const cancelAddVisior = () => {
 
 // 检查信息是否完全有误
 const checkVisitor = () => {
-    for (key in newVisitor.value.keys) {
+    /* LLLeo's comment: 这里添加了key前的let */
+    for (let key in newVisitor.value.keys) {
         console.log(key)
         if (newVisitor.value[key] == '') return false
     }
